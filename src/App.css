@@ -1,0 +1,159 @@
+/* ===== Theme ===== */
+:root{
+  --bg1:#0a0a0b;
+  --bg2:#121214;
+  --card:#151518;
+  --card-border:#242429;
+  --text:#e9e9ee;
+  --muted:#a6a6b0;
+  --accent:#28a37a;
+  --accent-2:#1f8c69;
+  --danger:#ff6161;
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--text)}
+
+.app{
+  min-height:100%;
+  background: radial-gradient(1200px 800px at 10% -20%, #15161a 0%, var(--bg1) 50%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+
+.container{max-width:1200px; margin:0 auto; padding:24px 16px}
+
+/* ===== Header ===== */
+.header{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding-bottom:10px; margin-bottom:16px; position:relative; z-index:5;
+}
+.header.sticky{position:sticky; top:0; background:linear-gradient(180deg, rgba(10,10,11,.9), rgba(10,10,11,0));
+  backdrop-filter: blur(6px); padding-top:8px;}
+.header__title{margin:0; font-size:28px; font-weight:800}
+.header__sub{margin:2px 0 0; color:var(--muted); font-size:12px}
+.header__right{display:flex; align-items:center; gap:12px}
+.header__clock{font-variant-numeric: tabular-nums; font-size:12px; color:#d2d2d9}
+.header__modes{display:flex; gap:8px}
+
+/* ===== Grid ===== */
+.grid{display:grid; gap:16px; grid-template-columns:1fr}
+@media (min-width:640px){ .grid{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:1200px){ .grid{grid-template-columns:repeat(4,1fr)} }
+
+/* Utility */
+.row{display:flex; align-items:center}
+.col{display:flex; flex-direction:column}
+.wrap{display:flex; flex-wrap:wrap}
+.between{justify-content:space-between}
+.gap{gap:12px}
+.mt{margin-top:8px}
+.grow{flex:1}
+.small{font-size:12px}
+.tiny{font-size:11px; letter-spacing:.2px}
+.truncate{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.muted{color:var(--muted)}
+.ok{color:#4bd28f}
+.danger{color:var(--danger)}
+.accent{color:var(--accent)}
+.label{font-weight:600}
+.xxl{font-size:46px; font-weight:800}
+
+/* ===== Card ===== */
+.card{
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  border:1px solid var(--card-border);
+  border-radius:16px; padding:16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.25);
+  transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover{transform: translateY(-1px); box-shadow:0 12px 24px rgba(0,0,0,.3); border-color:#2d2d32}
+.card__head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.card__title{margin:0; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:#c9c9cf}
+
+/* Tiles inside cards */
+.tile{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px; border-radius:12px; gap:10px;
+  background:#141418; border:1px solid var(--card-border);
+  min-width:calc(50% - 6px);
+}
+
+/* ===== Buttons / Pills ===== */
+.btn{
+  border:1px solid var(--card-border);
+  background:#15151a; color:var(--text);
+  padding:8px 12px; border-radius:12px; cursor:pointer;
+  transition: background .15s ease, transform .06s ease;
+}
+.btn:hover{background:#1a1a20}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--accent); border-color:var(--accent-2); color:#fff}
+.btn--primary:hover{background:var(--accent-2)}
+
+.pill{
+  font-size:12px; font-weight:600; padding:6px 10px; border-radius:999px;
+  background:#1a1a20; color:#cfcfd6; border:1px solid var(--card-border); cursor:pointer;
+  transition: background .15s ease, transform .06s ease;
+}
+.pill:hover{background:#22222a}
+.pill:active{transform:translateY(1px)}
+.pill--active{background:var(--accent); color:#fff; border-color:var(--accent-2)}
+
+/* ===== Switch ===== */
+.switch{
+  position:relative; width:46px; height:26px; border-radius:999px;
+  border:1px solid var(--card-border); background:#3a3a43; cursor:pointer;
+  transition:background .2s ease;
+}
+.switch__knob{
+  position:absolute; top:50%; left:3px; transform:translateY(-50%);
+  width:20px; height:20px; border-radius:999px; background:#fff; transition:transform .2s ease, box-shadow .2s ease;
+  box-shadow:0 1px 2px rgba(0,0,0,.45);
+}
+.switch--on{background:var(--accent)}
+.switch--on .switch__knob{transform:translate(22px,-50%)}
+
+/* ===== Slider (range) ===== */
+.slider{-webkit-appearance:none; width:100%; height:6px; border-radius:6px; background:#2a2a32; outline:none}
+.slider::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:#fff; cursor:pointer; border:2px solid var(--accent)}
+.slider::-moz-range-thumb{width:18px; height:18px; border-radius:50%; background:#fff; cursor:pointer; border:2px solid var(--accent)}
+
+/* ===== Media progress bar ===== */
+.bar{height:6px; background:#2a2a32; border-radius:999px; overflow:hidden}
+.bar__fill{height:100%; background:var(--accent); transition:width .2s ease}
+
+/* ===== Camera ===== */
+.camera{
+  aspect-ratio:16/9; width:100%; border-radius:14px; overflow:hidden;
+  border:1px solid var(--card-border);
+  background:url('https://images.unsplash.com/photo-1604908176997-43165122a1c3?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+}
+
+/* ===== Bars (energy) ===== */
+.bars{display:flex; align-items:flex-end; gap:8px; height:120px}
+.bars__col{flex:1; background:color-mix(in srgb, var(--accent) 35%, transparent); border-radius:6px; transition:height .5s ease}
+
+/* ===== Lists ===== */
+.list{list-style:none; margin:0; padding:0}
+.note{display:flex; align-items:center; gap:8px; padding:6px 0}
+.note--read{opacity:.65}
+.dot{width:8px; height:8px; border-radius:999px; background:#6ea8ff}
+.dot.warn{background:#ffb24b}
+.note__text{font-size:13px}
+
+.todo{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 0}
+.todo__label{display:flex; align-items:center; gap:8px}
+.todo__text{font-size:14px}
+.todo__text.done{text-decoration:line-through; color:var(--muted)}
+
+/* ===== Footer ===== */
+.footer{margin-top:16px; color:var(--muted); font-size:11px}
+
+/* ===== Art placeholder ===== */
+.art{
+  height:48px; width:48px; border-radius:12px;
+  display:grid; place-items:center;
+  background:#1e1e24; color:#b9b9c4; font-size:12px; border:1px solid var(--card-border);
+}
