@@ -70,10 +70,6 @@ export default function App() {
   const [humidity] = useState(58);
   const [hvacMode, setHvacMode] = useState("cool");
 
-  const [media, setMedia] = useState({
-    title: "Lofi Beats", artist: "Chillhop Radio", playing: true, progress: 38,
-  });
-
   const scenes = ["Relax", "Focus", "Movie", "Away"];
   const [activeScene, setActiveScene] = useState("Relax");
 
@@ -111,35 +107,6 @@ export default function App() {
   ]);
   const markAllRead = () =>
     setNotifications((n) => n.map((x) => ({ ...x, read: true })));
-
-  // To-Do with localStorage
-  const TODO_KEY = "dashboard.todos";
-  const [todos, setTodos] = useState(() => {
-    try {
-      const raw = localStorage.getItem(TODO_KEY);
-      return raw ? JSON.parse(raw) : [
-        { id: 1, text: "Check AC filter", done: true },
-        { id: 2, text: "Water plants", done: false },
-        { id: 3, text: "Pay electricity bill", done: true },
-      ];
-    } catch {
-      return [];
-    }
-  });
-  useEffect(() => {
-    localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-  }, [todos]);
-
-  const addTodo = () => {
-    const text = prompt("Add task:");
-    if (text && text.trim()) {
-      setTodos((t) => [...t, { id: Date.now(), text: text.trim(), done: false }]);
-    }
-  };
-  const toggleTodo = (id) =>
-    setTodos((t) => t.map((x) => (x.id === id ? { ...x, done: !x.done } : x)));
-  const removeTodo = (id) =>
-    setTodos((t) => t.filter((x) => x.id !== id));
 
   const toggleLight = (room) => setLights((s) => ({ ...s, [room]: !s[room] }));
 
@@ -226,33 +193,6 @@ export default function App() {
             </div>
           </Card>
 
-          {/* Media */}
-          <Card
-            title="MEDIA"
-            right={<span className="muted small">{media.playing ? "Playing" : "Paused"}</span>}
-          >
-            <div className="row gap">
-              <div className="art">ART</div>
-              <div className="grow">
-                <div className="truncate">{media.title}</div>
-                <div className="muted tiny truncate">{media.artist}</div>
-                <div className="bar">
-                  <div className="bar__fill" style={{ width: `${media.progress}%` }} />
-                </div>
-              </div>
-              <div className="row gap">
-                <button className="btn">⏮</button>
-                <button
-                  className="btn"
-                  onClick={() => setMedia((m) => ({ ...m, playing: !m.playing }))}
-                >
-                  ⏯
-                </button>
-                <button className="btn">⏭</button>
-              </div>
-            </div>
-          </Card>
-
           {/* Scenes */}
           <Card title="SCENES">
             <div className="wrap gap">
@@ -335,36 +275,6 @@ export default function App() {
                 <li key={n.id} className={`note ${n.read ? "note--read" : ""}`}>
                   <span className={`dot ${n.type}`}></span>
                   <span className="note__text">{n.text}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
-
-          {/* To-Do (persist) */}
-          <Card
-            title="TO-DO"
-            right={
-              <button className="btn tiny" onClick={addTodo}>
-                + Add
-              </button>
-            }
-          >
-            <ul className="list">
-              {todos.map((t) => (
-                <li key={t.id} className="todo">
-                  <label className="todo__label">
-                    <input
-                      type="checkbox"
-                      checked={t.done}
-                      onChange={() => toggleTodo(t.id)}
-                    />
-                    <span className={`todo__text ${t.done ? "done" : ""}`}>
-                      {t.text}
-                    </span>
-                  </label>
-                  <button className="btn tiny" onClick={() => removeTodo(t.id)}>
-                    ✕
-                  </button>
                 </li>
               ))}
             </ul>
