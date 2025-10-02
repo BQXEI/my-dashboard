@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
+import MapCard from "./MapCard";
 
 /* ---------- Small UI helpers ---------- */
 function Card({ title, right, children }) {
@@ -51,12 +52,28 @@ function Slider({ value, setValue, min = 0, max = 100, step = 1 }) {
 
 /* ---------- Main App ---------- */
 export default function App() {
-  // clock
   const [now, setNow] = useState(new Date());
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
+
+  const [weather, setWeather] = useState({
+    location: "Sriracha, TH",
+    condition: "Partly Cloudy",
+    temp: 31,
+    high: 33,
+    low: 26,
+    wind: 8,
+    aqi: 54,
+  });
+
+  function handleLocation(lat, lon) {
+    setWeather((w) => ({
+      ...w,
+      location: `${lat.toFixed(3)}, ${lon.toFixed(3)}`,
+    }));
+  }
 
   // mock states
   const [lights, setLights] = useState({
@@ -73,26 +90,18 @@ export default function App() {
   const scenes = ["Relax", "Focus", "Movie", "Away"];
   const [activeScene, setActiveScene] = useState("Relax");
 
-  const [doors] = useState({ Front: "Closed", Back: "Closed", Garage: "Open" });
+  const [doors] = useState({ Front: "Closed", Back: "Open", Garage: "Open" });
   const [alarm, setAlarm] = useState(false);
 
-  const [weather] = useState({
-    location: "Sriracha, TH", condition: "Partly Cloudy",
-    temp: 31, high: 33, low: 26, wind: 8, aqi: 54,
-  });
-
-  // energy data
   const [energy, setEnergy] = useState({
     todayKWh: 18.4, monthKWh: 462.2, costTHB: 225.8,
     hourly: [1.0,1.1,0.9,0.8,0.7,1.0,1.5,1.9,2.4,2.1,1.7,1.5],
   });
-  // animate bars a bit
   useEffect(() => {
     const id = setInterval(() => {
       setEnergy((e) => {
         const next = [...e.hourly];
         next.shift();
-        // mock fluctuate
         next.push(Math.max(0.6, Math.min(2.6, next[next.length - 1] + (Math.random() - 0.5))));
         return { ...e, hourly: next };
       });
@@ -116,7 +125,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="container">
-        {/* Header (sticky) */}
+        {/* Header */}
         <header className="header sticky">
           <div className="header__left">
             <h1 className="header__title">Home</h1>
@@ -137,10 +146,7 @@ export default function App() {
         {/* Grid */}
         <div className="grid">
           {/* Weather */}
-          <Card
-            title="WEATHER"
-            right={<span className="muted">{weather.location}</span>}
-          >
+          <Card title="WEATHER" right={<span className="muted">{weather.location}</span>}>
             <div className="row gap">
               <div className="xxl">{weather.temp}°C</div>
               <div className="muted small">
@@ -152,10 +158,7 @@ export default function App() {
           </Card>
 
           {/* Lights */}
-          <Card
-            title="LIGHTS"
-            right={<span className="muted small">{totalOn}/{lightNames.length} on</span>}
-          >
+          <Card title="LIGHTS" right={<span className="muted small">{totalOn}/{lightNames.length} on</span>}>
             <div className="wrap gap">
               {lightNames.map((room) => (
                 <div key={room} className="tile">
@@ -175,33 +178,74 @@ export default function App() {
               <div className="xxl">{temp}°</div>
               <div className="grow">
                 <div className="row between tiny">
-                  <span>
-                    Target: <b className="accent">{targetTemp}°C</b>
-                  </span>
+                  <span>Target: <b className="accent">{targetTemp}°C</b></span>
                   <span className="muted">Mode: {hvacMode.toUpperCase()}</span>
                 </div>
                 <Slider value={targetTemp} setValue={setTargetTemp} min={16} max={32} />
                 <div className="row gap mt">
-                  <button className="btn" onClick={() => setTemp((t) => Math.max(10, t - 1))}>
-                    –
-                  </button>
-                  <button className="btn" onClick={() => setTemp((t) => Math.min(40, t + 1))}>
-                    +
-                  </button>
+                  <button className="btn" onClick={() => setTemp((t) => Math.max(10, t - 1))}>–</button>
+                  <button className="btn" onClick={() => setTemp((t) => Math.min(40, t + 1))}>+</button>
                 </div>
               </div>
             </div>
           </Card>
 
-          {/* Scenes */}
-          <Card title="SCENES">
-            <div className="wrap gap">
-              {scenes.map((s) => (
-                <Pill key={s} active={activeScene === s} onClick={() => setActiveScene(s)}>
-                  {s}
-                </Pill>
+        {/* Map */}
+        <MapCard onLocation={handleLocation} />
+
+        {/* Energy (enhanced) */}
+          <Card
+            title="ENERGY (TODAY)"
+            right={
+              <span className="tiny muted">
+                min {minEnergy.toFixed(1)} · max {maxEnergy.toFixed(1)}
+              </span>
+            }
+          >
+            <div className="bars">
+              {energy.hourly.map((v, i) => (
+                <div
+                  key={i}
+                  className="bars__col"
+                  style={{ height: `${12 + v * 22}px` }}
+                  title={`${v.toFixed(2)} kWh`}
+                />
               ))}
             </div>
+            <div className="muted small mt">
+              <div>
+                {energy.todayKWh.toFixed(1)} kWh · ~ ฿{energy.costTHB.toFixed(2)}
+              </div>
+              <div className="tiny">Month: {energy.monthKWh} kWh</div>
+            </div>
+          </Card>
+
+                    {/* Camera */}
+          <Card title="DRIVEWAY CAMERA">
+            <div className="camera" />
+            <div className="row gap mt">
+              <button className="btn">Snapshot</button>
+              <button className="btn">Record</button>
+            </div>
+          </Card>
+
+                    {/* Notifications */}
+          <Card
+            title="NOTIFICATIONS"
+            right={
+              <button className="btn tiny" onClick={markAllRead}>
+                Mark all read
+              </button>
+            }
+          >
+            <ul className="list">
+              {notifications.map((n) => (
+                <li key={n.id} className={`note ${n.read ? "note--read" : ""}`}>
+                  <span className={`dot ${n.type}`}></span>
+                  <span className="note__text">{n.text}</span>
+                </li>
+              ))}
+            </ul>
           </Card>
 
           {/* Security */}
@@ -251,41 +295,14 @@ export default function App() {
               <div className="tiny">Month: {energy.monthKWh} kWh</div>
             </div>
           </Card>
-
-          {/* Camera */}
-          <Card title="DRIVEWAY CAMERA">
-            <div className="camera" />
-            <div className="row gap mt">
-              <button className="btn">Snapshot</button>
-              <button className="btn">Record</button>
-            </div>
-          </Card>
-
-          {/* Notifications */}
-          <Card
-            title="NOTIFICATIONS"
-            right={
-              <button className="btn tiny" onClick={markAllRead}>
-                Mark all read
-              </button>
-            }
-          >
-            <ul className="list">
-              {notifications.map((n) => (
-                <li key={n.id} className={`note ${n.read ? "note--read" : ""}`}>
-                  <span className={`dot ${n.type}`}></span>
-                  <span className="note__text">{n.text}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </div>
-
+          
+        
         {/* Footer */}
         <footer className="footer">
           Demo UI inspired by Home Assistant Lovelace · Frontend only (mock data).
         </footer>
       </div>
     </div>
+  </div>
   );
 }
