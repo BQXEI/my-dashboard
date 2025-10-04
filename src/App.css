@@ -1,4 +1,4 @@
-/* ===== Theme ===== */
+/* ===== Theme (Dark – Default) ===== */
 :root{
   --bg1:#0a0a0b;
   --bg2:#121214;
@@ -9,18 +9,41 @@
   --accent:#28a37a;
   --accent-2:#1f8c69;
   --danger:#ff6161;
+
+  /* spacing & radius */
+  --radius:16px;
+  --radius-sm:12px;
+  --pad:16px;
+  --gap:12px;
+}
+
+/* ===== Theme (Light) – ใช้โดยเพิ่ม class theme-light บน <html> ===== */
+.theme-light{
+  --bg1:#f5f7fb;
+  --bg2:#eef1f7;
+  --card:#ffffff;
+  --card-border:#e6e8ee;
+  --text:#0b0d13;
+  --muted:#5f6470;
+  --accent:#1f8c69;
+  --accent-2:#177458;
+  --danger:#e54848;
 }
 
 *{box-sizing:border-box}
 html,body,#root{height:100%}
-body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--text)}
-
-.app{
-  min-height:100%;
-  background: radial-gradient(1200px 800px at 10% -20%, #15161a 0%, var(--bg1) 50%),
-              linear-gradient(180deg, var(--bg1), var(--bg2));
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  color:var(--text)
 }
 
+/* ===== App BG ===== */
+.app{
+  min-height:100%;
+  background: radial-gradient(1200px 800px at 10% -20%, color-mix(in srgb, var(--card) 40%, transparent) 0%, var(--bg1) 50%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+}
 .container{max-width:1200px; margin:0 auto; padding:24px 16px}
 
 /* ===== Header ===== */
@@ -28,12 +51,15 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
   display:flex; align-items:center; justify-content:space-between; gap:12px;
   padding-bottom:10px; margin-bottom:16px; position:relative; z-index:5;
 }
-.header.sticky{position:sticky; top:0; background:linear-gradient(180deg, rgba(10,10,11,.9), rgba(10,10,11,0));
-  backdrop-filter: blur(6px); padding-top:8px;}
+.header.sticky{
+  position:sticky; top:0;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--bg1) 95%, transparent) 0%, rgba(10,10,11,0));
+  backdrop-filter: blur(6px); padding-top:8px;
+}
 .header__title{margin:0; font-size:28px; font-weight:800}
 .header__sub{margin:2px 0 0; color:var(--muted); font-size:12px}
 .header__right{display:flex; align-items:center; gap:12px}
-.header__clock{font-variant-numeric: tabular-nums; font-size:12px; color:#d2d2d9}
+.header__clock{font-variant-numeric: tabular-nums; font-size:12px; color:color-mix(in srgb, var(--text) 78%, transparent)}
 .header__modes{display:flex; gap:8px}
 
 /* ===== Grid ===== */
@@ -41,13 +67,14 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
 @media (min-width:640px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media (min-width:1200px){ .grid{grid-template-columns:repeat(4,1fr)} }
 
-/* Utility */
+/* ===== Utilities ===== */
 .row{display:flex; align-items:center}
 .col{display:flex; flex-direction:column}
 .wrap{display:flex; flex-wrap:wrap}
 .between{justify-content:space-between}
-.gap{gap:12px}
+.gap{gap:var(--gap)}
 .mt{margin-top:8px}
+.mb{margin-bottom:12px}
 .grow{flex:1}
 .small{font-size:12px}
 .tiny{font-size:11px; letter-spacing:.2px}
@@ -63,50 +90,58 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
 .card{
   background: color-mix(in srgb, var(--card) 90%, transparent);
   border:1px solid var(--card-border);
-  border-radius:16px; padding:16px;
+  border-radius:var(--radius); padding:var(--pad);
   backdrop-filter: blur(6px);
   box-shadow: 0 10px 20px rgba(0,0,0,.25);
   transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.card:hover{transform: translateY(-1px); box-shadow:0 12px 24px rgba(0,0,0,.3); border-color:#2d2d32}
+.card:hover{transform: translateY(-1px); box-shadow:0 12px 24px rgba(0,0,0,.3); border-color:color-mix(in srgb, var(--card-border) 80%, #2d2d32)}
 .card__head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
-.card__title{margin:0; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:#c9c9cf}
+.card__title{margin:0; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:color-mix(in srgb, var(--text) 76%, transparent)}
+.card__content{}
 
-/* Tiles inside cards */
+/* ===== Tiles inside cards ===== */
 .tile{
   display:flex; align-items:center; justify-content:space-between;
-  padding:12px; border-radius:12px; gap:10px;
-  background:#141418; border:1px solid var(--card-border);
+  padding:12px; border-radius:var(--radius-sm); gap:10px;
+  background: color-mix(in srgb, var(--card) 95%, transparent);
+  border:1px solid var(--card-border);
   min-width:calc(50% - 6px);
 }
 
 /* ===== Buttons / Pills ===== */
 .btn{
   border:1px solid var(--card-border);
-  background:#15151a; color:var(--text);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  color:var(--text);
   padding:8px 12px; border-radius:12px; cursor:pointer;
-  transition: background .15s ease, transform .06s ease;
+  transition: background .15s ease, transform .06s ease, border-color .15s ease;
 }
-.btn:hover{background:#1a1a20}
+.btn:hover{background: color-mix(in srgb, var(--card) 86%, transparent)}
 .btn:active{transform:translateY(1px)}
 .btn--primary{background:var(--accent); border-color:var(--accent-2); color:#fff}
 .btn--primary:hover{background:var(--accent-2)}
+.btn.tiny{font-size:12px; padding:6px 10px}
 
+/*-pill ใช้เป็น tab ด้วย*/
 .pill{
   font-size:12px; font-weight:600; padding:6px 10px; border-radius:999px;
-  background:#1a1a20; color:#cfcfd6; border:1px solid var(--card-border); cursor:pointer;
-  transition: background .15s ease, transform .06s ease;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  color:#cfcfd6; border:1px solid var(--card-border); cursor:pointer;
+  transition: background .15s ease, transform .06s ease, border-color .15s ease;
 }
-.pill:hover{background:#22222a}
+.theme-light .pill{ color: #2a2f36; }
+.pill:hover{background: color-mix(in srgb, var(--card) 82%, transparent)}
 .pill:active{transform:translateY(1px)}
 .pill--active{background:var(--accent); color:#fff; border-color:var(--accent-2)}
 
-/* ===== Switch ===== */
+/* ===== Switch (แบบเดิม: ปุ่ม + knob) ===== */
 .switch{
   position:relative; width:46px; height:26px; border-radius:999px;
   border:1px solid var(--card-border); background:#3a3a43; cursor:pointer;
   transition:background .2s ease;
 }
+.theme-light .switch{ background:#cfd6de; }
 .switch__knob{
   position:absolute; top:50%; left:3px; transform:translateY(-50%);
   width:20px; height:20px; border-radius:999px; background:#fff; transition:transform .2s ease, box-shadow .2s ease;
@@ -117,11 +152,11 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
 
 /* ===== Slider (range) ===== */
 .slider{-webkit-appearance:none; width:100%; height:6px; border-radius:6px; background:#2a2a32; outline:none}
+.theme-light .slider{ background:#e3e7ee; }
 .slider::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:#fff; cursor:pointer; border:2px solid var(--accent)}
 .slider::-moz-range-thumb{width:18px; height:18px; border-radius:50%; background:#fff; cursor:pointer; border:2px solid var(--accent)}
 
-
-/* ===== Camera ===== */
+/* ===== Camera Placeholder ===== */
 .camera{
   aspect-ratio:16/9; width:100%; border-radius:14px; overflow:hidden;
   border:1px solid var(--card-border);
@@ -140,6 +175,7 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
 .dot.warn{background:#ffb24b}
 .note__text{font-size:13px}
 
+/* ===== Todo (ถ้ามี) ===== */
 .todo{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 0}
 .todo__label{display:flex; align-items:center; gap:8px}
 .todo__text{font-size:14px}
@@ -148,9 +184,86 @@ body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, R
 /* ===== Footer ===== */
 .footer{margin-top:16px; color:var(--muted); font-size:11px}
 
-/* ===== Art placeholder ===== */
+/* ===== Art placeholder / Avatar ===== */
 .art{
   height:48px; width:48px; border-radius:12px;
   display:grid; place-items:center;
   background:#1e1e24; color:#b9b9c4; font-size:12px; border:1px solid var(--card-border);
 }
+.theme-light .art{ background:#eef1f7; color:#465063; }
+
+/* ===== Tabs (ใช้ pill แทน tab ปกติ) ===== */
+.tabs { display:flex; flex-wrap:wrap; gap:.5rem; }
+.tab { padding:.5rem 1rem; border-radius:999px; border:1px solid var(--card-border); background:transparent; color:var(--text); }
+.tab--active { background:var(--accent); color:#fff; border-color:var(--accent-2); }
+
+/* ===== Inputs (ใช้ใน Dialogs) ===== */
+input, select, textarea{
+  background:#111317;
+  color:var(--text);
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  padding:10px 12px;
+  outline:none;
+}
+.theme-light input, .theme-light select, .theme-light textarea{
+  background:#ffffff; border-color:#d9dee7; color:#1a1f27;
+}
+
+/* ===== Modal / Dialog ===== */
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:grid; place-items:center; z-index:1000;
+}
+.modal__content{
+  background: color-mix(in srgb, var(--card) 95%, white 0%);
+  border:1px solid var(--card-border);
+  border-radius:14px; padding:16px; width:min(520px, 92vw);
+  box-shadow: 0 16px 32px rgba(0,0,0,.35);
+}
+
+/* ===== User Profile (header) – ใช้เวอร์ชันเดิมให้ครบ ===== */
+.user-profile{display:flex;align-items:center;gap:.6rem;padding:.35rem .6rem;border:1px solid #22262e;border-radius:.625rem;background:#111318}
+.user-profile .avatar{position:relative;width:34px;height:34px;border-radius:999px;overflow:hidden;background:#1f2937;display:grid;place-items:center;font-weight:700;font-size:.9rem;color:#dbeafe;text-transform:uppercase}
+.user-profile .avatar img{width:100%;height:100%;object-fit:cover}
+.user-profile .status-dot{position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 2px #0b0d13}
+.user-profile .info{display:grid}
+.user-profile .name{line-height:1;font-weight:600}
+
+/* ถ้าคุณมี dropdown/menu ของโปรไฟล์ */
+.profile { position: relative; }
+.profile__btn {
+  display:flex; align-items:center; gap:.6rem;
+  padding:.35rem .6rem; border-radius:.625rem;
+  background:#111318; border:1px solid #22262e; color:#e7e7e7;
+}
+.profile__btn:hover { border-color:#2e3340; background:#131722; }
+.profile__menu {
+  position:absolute; right:0; top:calc(100% + .4rem);
+  min-width:180px; background:#0e1116; border:1px solid #21242c;
+  border-radius:.6rem; padding:.35rem; z-index:50; box-shadow:0 10px 24px rgba(0,0,0,.4);
+}
+.menu__item { width:100%; text-align:left; padding:.55rem .6rem; border-radius:.45rem; color:#d7d8dc; background:transparent; border:0; cursor:pointer; }
+.menu__item:hover { background:#151a22; }
+.menu__divider { border:0; border-top:1px solid #22252e; margin:.35rem 0; }
+.menu__item.danger { color:#f87171; }
+.menu__item.danger:hover { background:#1b1212; }
+
+/* ===== Leaflet Map tweaks (ให้กลืนกับการ์ด) ===== */
+.leaflet-container{
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  font-family: inherit;
+}
+.leaflet-control-attribution{
+  background: color-mix(in srgb, var(--card) 92%, transparent) !important;
+  color: var(--muted) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 8px !important;
+  padding: 2px 6px !important;
+}
+
+/* ===== Density (Compact Mode) – ใส่ .is-compact บน .container ===== */
+.is-compact .card{ padding:12px; }
+.is-compact .tile{ padding:10px; }
+.is-compact .gap{ gap:8px; }
+.is-compact .header__title{ font-size:24px; }
