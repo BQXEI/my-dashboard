@@ -267,3 +267,4 @@ input, select, textarea{
 .is-compact .tile{ padding:10px; }
 .is-compact .gap{ gap:8px; }
 .is-compact .header__title{ font-size:24px; }
+/* ===== Textarea auto-resize ===== */

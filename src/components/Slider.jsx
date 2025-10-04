@@ -10,3 +10,4 @@ export default function Slider({ value, setValue, min, max }) {
     />
   );
 }
+//

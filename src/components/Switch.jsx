@@ -6,3 +6,4 @@ export default function Switch({ checked, onChange }) {
     </label>
   );
 }
+//

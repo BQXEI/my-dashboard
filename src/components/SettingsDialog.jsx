@@ -41,3 +41,4 @@ export default function SettingsDialog({ open, onClose, settings, setSettings })
     </div>
   );
 }
+//
